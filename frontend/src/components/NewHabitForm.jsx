@@ -42,6 +42,21 @@ import {
   Sun
 } from 'lucide-react';
 
+const metrics = [
+  'steps',
+  'minutes',
+  'hours',
+  'kilometers',
+  'miles',
+  'calories',
+  'glasses',
+  'pages',
+  'times',
+  'reps',
+  'sets',
+  'units'
+];
+
 export const habitIcons = [
   { icon: HeartPulse, label: 'Health', category: 'Wellness' },
   { icon: Brain, label: 'Focus', category: 'Wellness' },
@@ -98,6 +113,7 @@ export function NewHabitForm({ initialData, isEditing = false }) {
     reminderTime: null,
     isQuantityBased: false,
     quantity: 1,
+    metric: 'times',
     color: '#5CE1E6',
     priority: 'medium',
     selectedIcon: 0,
@@ -132,28 +148,37 @@ export function NewHabitForm({ initialData, isEditing = false }) {
     const newErrors = {};
     if (!formData.name.trim()) {
       newErrors.name = 'Habit name is required';
-    }
-    if (formData.isQuantityBased && formData.quantity < 1) {
-      newErrors.quantity = 'Quantity must be greater than 0';
+    }    if (formData.isQuantityBased) {
+      if (formData.quantity < 1) {
+        newErrors.quantity = 'Quantity must be greater than 0';
+      }
+      if (!formData.metric) {
+        newErrors.metric = 'Please select a metric';
+      }
     }
     if ((formData.frequency === 'weekly' || formData.frequency === 'custom') && formData.days.length === 0) {
       newErrors.days = 'Please select at least one day';
     }
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
-  };
-  const handleSubmit = async (e) => {
+  };  const handleSubmit = async (e) => {
     e.preventDefault();
     if (validateForm()) {
       try {
-        console.log('Submitting habit data:', { isEditing, formData }); // Debug log
+        // Ensure selectedIcon is set
+        const submitData = {
+          ...formData,
+          selectedIcon: formData.selectedIcon ?? 0 // Use existing or default to 0
+        };
+        
+        console.log('Submitting habit data:', { isEditing, data: submitData }); // Debug log
         
         if (isEditing) {
           console.log('Updating habit:', initialData._id); // Debug log
-          await habitsApi.updateHabit(initialData._id, formData);
+          await habitsApi.updateHabit(initialData._id, submitData);
         } else {
           console.log('Creating new habit'); // Debug log
-          await habitsApi.createHabit(formData);
+          await habitsApi.createHabit(submitData);
         }
 
         toast.success(
@@ -218,7 +243,9 @@ export function NewHabitForm({ initialData, isEditing = false }) {
           {errors.name && (
             <p className="mt-1 text-sm text-red-600 font-medium">{errors.name}</p>
           )}
-        </div>        {/* Description */}
+        </div>
+
+        {/* Description */}
         <div>
           <label className="block text-sm font-semibold text-gray-900 mb-1">
             Description
@@ -433,21 +460,58 @@ export function NewHabitForm({ initialData, isEditing = false }) {
           </div>
 
           {formData.isQuantityBased && (
-            <div>
-              <label className="block text-sm font-semibold text-gray-900 mb-1">
-                Daily Target
-              </label>
-              <input
-                type="number"
-                name="quantity"
-                value={formData.quantity}
-                onChange={handleInputChange}
-                min="1"
-                className="w-32 px-3 py-2 border border-gray-300 text-gray-900 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 bg-white"
-              />
-              {errors.quantity && (
-                <p className="mt-1 text-sm text-red-600 font-medium">{errors.quantity}</p>
-              )}
+            <div className="space-y-4">
+              <div className="flex flex-col gap-4">
+                <div>
+                  <label className="block text-sm font-semibold text-gray-900 mb-1">
+                    Daily Target
+                  </label>
+                  <div className="flex items-center gap-2">
+                    <input
+                      type="number"
+                      name="quantity"
+                      value={formData.quantity}
+                      onChange={handleInputChange}
+                      min="1"
+                      className="w-32 px-3 py-2 border border-gray-300 text-gray-900 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 bg-white"
+                    />
+                    <div className="text-gray-500">{formData.metric || 'Select metric'}</div>
+                  </div>
+                  {errors.quantity && (
+                    <p className="mt-1 text-sm text-red-600 font-medium">{errors.quantity}</p>
+                  )}
+                </div>
+
+                <div>
+                  <label className="block text-sm font-semibold text-gray-900 mb-1">
+                    Select Metric
+                  </label>
+                  <div className="grid grid-cols-3 sm:grid-cols-4 gap-2">
+                    {metrics.map(metric => (
+                      <button
+                        key={metric}
+                        type="button"
+                        onClick={() => handleInputChange({ target: { name: 'metric', value: metric } })}
+                        className={`px-3 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${
+                          formData.metric === metric
+                            ? 'shadow-md scale-105'
+                            : 'border-2 border-gray-200 hover:border-blue-200 hover:bg-gray-50'
+                        }`}
+                        style={formData.metric === metric ? {
+                          backgroundColor: `${formData.color}15`,
+                          borderColor: formData.color,
+                          color: formData.color
+                        } : {}}
+                      >
+                        {metric}
+                      </button>
+                    ))}
+                  </div>
+                  {errors.metric && (
+                    <p className="mt-1 text-sm text-red-600 font-medium">{errors.metric}</p>
+                  )}
+                </div>
+              </div>
             </div>
           )}
         </div>
@@ -468,16 +532,15 @@ export function NewHabitForm({ initialData, isEditing = false }) {
               style={{ 
                 backgroundColor: color,
                 '--tw-ring-color': formData.color === color ? color : undefined
-              }}
-                style={{ backgroundColor: color }}
-              >
+              }}>
                 {formData.color === color && (
                   <CheckIcon className="w-4 h-4 text-white mx-auto" />
                 )}
               </button>
             ))}
-          </div>
-        </div>        {/* Priority */}
+          </div>          </div>
+
+        {/* Priority */}
         <div>
           <label className="block text-sm font-semibold text-gray-900 mb-3">
             <span className="flex items-center gap-2">
@@ -570,7 +633,9 @@ export function NewHabitForm({ initialData, isEditing = false }) {
               </button>
             ))}
           </div>
-        </div>        {/* Submit Button */}
+        </div>
+
+        {/* Submit Button */}
         <div className="pt-8">
           <div className="relative">
             <div className="absolute inset-0 bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 rounded-lg blur"></div>

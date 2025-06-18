@@ -36,6 +36,9 @@ const habitSchema = new mongoose.Schema({
     default: 1,
     min: [1, 'Quantity must be at least 1']
   },
+  metric: {
+    type: String
+  },
   color: {
     type: String,
     default: '#5CE1E6'

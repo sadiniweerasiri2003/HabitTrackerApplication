@@ -5,10 +5,42 @@ const asyncHandler = require('express-async-handler');
 // @route   POST /api/habits
 // @access  Private
 const createHabit = asyncHandler(async (req, res) => {
-  const habit = await Habit.create({
+  console.log('\n=== CREATE HABIT REQUEST ===');
+  console.log('Raw request body:', req.body);
+  
+  const habitData = {
     ...req.body,
     user: req.user._id
+  };
+  
+  console.log('\n=== PROCESSED HABIT DATA ===');
+  console.log('Data to be saved:', {
+    name: habitData.name,
+    isQuantityBased: habitData.isQuantityBased,
+    quantity: habitData.quantity,
+    metric: habitData.metric,
+    user: habitData.user
   });
+  
+  // Ensure metric is set when habit is quantity-based
+  if (habitData.isQuantityBased && !habitData.metric) {
+    habitData.metric = 'times';
+    console.log('Setting default metric to "times"');
+  }
+
+  const habit = await Habit.create(habitData);
+  
+  console.log('\n=== SAVED HABIT DATA ===');
+  console.log('Database record:', {
+    id: habit._id,
+    name: habit.name,
+    isQuantityBased: habit.isQuantityBased,
+    quantity: habit.quantity,
+    metric: habit.metric,
+    createdAt: habit.createdAt
+  });
+  console.log('================================\n');
+  
   res.status(201).json(habit);
 });
 

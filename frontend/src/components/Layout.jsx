@@ -1,12 +1,12 @@
 import React from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { handleSignOut } from '../utils/auth';
 import {
   Home,
   CheckSquare,
   Bell,
   User,
   LogOut,
-  Settings,
   BarChart2,
   Calendar,
   Sparkles
@@ -16,13 +16,9 @@ export function Layout({ children }) {
   const location = useLocation();
   const navigate = useNavigate();
   const user = JSON.parse(localStorage.getItem('user') || '{}');
-
-  const handleSignOut = () => {
-    localStorage.removeItem('token');
-    localStorage.removeItem('user');
-    navigate('/login');
+  const onSignOut = () => {
+    handleSignOut(navigate);
   };
-
   const navigation = [
     { name: 'Home', icon: Home, path: '/' },
     { name: 'My Habits', icon: CheckSquare, path: '/habits' },
@@ -30,7 +26,6 @@ export function Layout({ children }) {
     { name: 'Calendar', icon: Calendar, path: '/calendar' },
     { name: 'Notifications', icon: Bell, path: '/notifications' },
     { name: 'Profile', icon: User, path: '/profile' },
-    { name: 'Settings', icon: Settings, path: '/settings' },
   ];
 
   const isActive = (path) => {
@@ -40,14 +35,16 @@ export function Layout({ children }) {
   };
 
   return (
-    <div className="h-screen bg-gray-50 flex overflow-hidden">
+    <div className="h-screen bg-gray-50 flex overflow-hidden font-sans">
       {/* Sidebar */}
-      <div className="w-64 bg-white shadow-lg flex flex-col">
+      <div className="w-64 bg-white shadow-sm border-r border-gray-100 flex flex-col">
         {/* Logo */}
-        <div className="h-16 flex-shrink-0 flex items-center px-4 bg-gradient-to-r from-blue-500 to-indigo-600">
-          <div className="flex items-center gap-2">
-            <Sparkles className="w-8 h-8 text-white" />
-            <span className="text-white font-bold text-xl">HabitTracker</span>
+        <div className="h-16 flex-shrink-0 flex items-center px-6 bg-white border-b border-gray-100">
+          <div className="flex items-center gap-3">
+            <div className="relative">
+              <Sparkles className="w-8 h-8 text-[#0B1D51]" />
+            </div>
+            <span className="text-[#0B1D51] font-semibold text-xl tracking-tight">HabitLoop</span>
           </div>
         </div>
 
@@ -57,10 +54,10 @@ export function Layout({ children }) {
             <Link
               key={item.name}
               to={item.path}
-              className={`flex items-center gap-3 px-4 py-3 text-gray-600 hover:bg-gray-50 transition-colors ${
+              className={`flex items-center gap-3 px-4 py-3 text-[#0B1D51] hover:bg-gray-50 transition-colors ${
                 isActive(item.path)
-                  ? 'text-blue-600 bg-blue-50 border-r-4 border-blue-500'
-                  : ''
+                  ? 'bg-blue-50 font-medium'
+                  : 'opacity-75 hover:opacity-100'
               }`}
             >
               <item.icon className="w-5 h-5" />
@@ -73,16 +70,16 @@ export function Layout({ children }) {
         <div className="flex-shrink-0 border-t border-gray-200 p-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center">
-              <div className="w-8 h-8 rounded-full bg-blue-500 flex items-center justify-center text-white font-semibold">
+              <div className="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center text-[#0B1D51] font-medium">
                 {user.username?.[0]?.toUpperCase() || 'U'}
               </div>
-              <span className="ml-3 text-sm font-medium text-gray-700">
+              <span className="ml-3 text-sm font-medium text-[#0B1D51]">
                 {user.username || 'User'}
               </span>
             </div>
             <button
-              onClick={handleSignOut}
-              className="p-2 text-gray-400 hover:text-gray-600 transition-colors"
+              onClick={onSignOut}
+              className="p-2 text-[#0B1D51] opacity-75 hover:opacity-100 transition-colors"
               title="Sign out"
             >
               <LogOut className="w-5 h-5" />

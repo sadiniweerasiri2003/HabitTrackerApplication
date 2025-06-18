@@ -5,6 +5,10 @@ import './styles/layout.css';
 import { NewHabitForm } from './components/NewHabitForm';
 import { EditHabitForm } from './components/EditHabitForm';
 import { HabitList } from './components/HabitList';
+import { HabitCalendar } from './components/HabitCalendar';
+import { Statistics } from './components/Statistics';
+import { Notifications } from './components/Notifications';
+import { Profile } from './components/Profile';
 import { Login } from './components/Login';
 import { Home } from './components/Home';
 import { Layout } from './components/Layout';
@@ -36,6 +40,26 @@ function App() {
           }
         />
         <Route
+          path="/statistics"
+          element={
+            <ProtectedRoute>
+              <Layout>
+                <Statistics />
+              </Layout>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/calendar"
+          element={
+            <ProtectedRoute>
+              <Layout>
+                <HabitCalendar />
+              </Layout>
+            </ProtectedRoute>
+          }
+        />
+        <Route
           path="/new-habit"
           element={
             <ProtectedRoute>
@@ -56,31 +80,11 @@ function App() {
           }
         />
         <Route
-          path="/statistics"
-          element={
-            <ProtectedRoute>
-              <Layout>
-                <div className="p-8">Statistics page coming soon!</div>
-              </Layout>
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/calendar"
-          element={
-            <ProtectedRoute>
-              <Layout>
-                <div className="p-8">Calendar view coming soon!</div>
-              </Layout>
-            </ProtectedRoute>
-          }
-        />
-        <Route
           path="/notifications"
           element={
             <ProtectedRoute>
               <Layout>
-                <div className="p-8">Notifications coming soon!</div>
+                <Notifications />
               </Layout>
             </ProtectedRoute>
           }
@@ -90,7 +94,7 @@ function App() {
           element={
             <ProtectedRoute>
               <Layout>
-                <div className="p-8">Profile page coming soon!</div>
+                <Profile />
               </Layout>
             </ProtectedRoute>
           }
