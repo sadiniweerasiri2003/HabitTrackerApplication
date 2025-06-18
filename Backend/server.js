@@ -21,6 +21,13 @@ mongoose.connect(process.env.MONGODB_URI, {
   console.error('Error connecting to MongoDB:', error.message);
 });
 
+// Routes
+const userRoutes = require('./routes/userRoutes');
+const habitRoutes = require('./routes/habitRoutes');
+
+app.use('/api/users', userRoutes);
+app.use('/api/habits', habitRoutes);
+
 // Basic route for testing
 app.get('/', (req, res) => {
   res.json({ message: 'Welcome to Habit Tracker API' });
@@ -28,8 +35,12 @@ app.get('/', (req, res) => {
 
 // Error handling middleware
 app.use((err, req, res, next) => {
-  console.error(err.stack);
-  res.status(500).json({ message: 'Something went wrong!' });
+  const statusCode = res.statusCode ? res.statusCode : 500;
+  res.status(statusCode);
+  res.json({
+    message: err.message,
+    stack: process.env.NODE_ENV === 'production' ? null : err.stack,
+  });
 });
 
 // Start server
