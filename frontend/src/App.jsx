@@ -7,7 +7,6 @@ import { EditHabitForm } from './components/EditHabitForm';
 import { HabitList } from './components/HabitList';
 import { HabitCalendar } from './components/HabitCalendar';
 import { Statistics } from './components/Statistics';
-import { Notifications } from './components/Notifications';
 import { Profile } from './components/Profile';
 import { Login } from './components/Login';
 import { Home } from './components/Home';
@@ -75,16 +74,6 @@ function App() {
             <ProtectedRoute>
               <Layout>
                 <EditHabitForm />
-              </Layout>
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/notifications"
-          element={
-            <ProtectedRoute>
-              <Layout>
-                <Notifications />
               </Layout>
             </ProtectedRoute>
           }

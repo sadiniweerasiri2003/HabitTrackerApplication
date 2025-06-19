@@ -4,7 +4,6 @@ import { handleSignOut } from '../utils/auth';
 import {
   Home,
   CheckSquare,
-  Bell,
   User,
   LogOut,
   BarChart2,
@@ -24,7 +23,6 @@ export function Layout({ children }) {
     { name: 'My Habits', icon: CheckSquare, path: '/habits' },
     { name: 'Statistics', icon: BarChart2, path: '/statistics' },
     { name: 'Calendar', icon: Calendar, path: '/calendar' },
-    { name: 'Notifications', icon: Bell, path: '/notifications' },
     { name: 'Profile', icon: User, path: '/profile' },
   ];
 

@@ -17,7 +17,6 @@ import {
 import { HabitDetails } from './HabitDetails';
 import { habitIcons } from './NewHabitForm';
 import { habitsApi } from '../services/api';
-import { notificationService } from '../services/notificationService';
 
 const DeleteConfirmDialog = ({ habit, onConfirm, onCancel }) => {
   const messages = [
@@ -77,12 +76,6 @@ export function HabitList() {
     try {
       const data = await habitsApi.getAllHabits();
       setHabits(data);
-      // Schedule notifications for all habits
-      data.forEach(habit => {
-        if (isHabitDueToday(habit)) {
-          notificationService.scheduleHabitReminders(habit);
-        }
-      });
     } catch (error) {
       toast.error('Failed to load habits');
       console.error('Error:', error);

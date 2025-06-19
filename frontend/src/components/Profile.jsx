@@ -7,7 +7,6 @@ import {
   Settings,
   Mail,
   Lock,
-  Bell,
   Calendar,
   Clock,
   ChevronRight,
@@ -42,13 +41,6 @@ export function Profile() {
     completedToday: 0,
     streakCount: 0,
     joinDate: new Date(),
-  });
-  const [settings, setSettings] = useState({
-    notifications: true,
-    dailySummary: true,
-    soundEnabled: true,
-    reminderTime: '09:00',
-    weeklyReport: true
   });
 
   useEffect(() => {
@@ -480,92 +472,6 @@ export function Profile() {
               <h2 className="text-xl font-bold text-gray-900">Settings</h2>
               <div className="text-sm text-gray-500">
                 Changes are saved automatically
-              </div>
-            </div>
-            
-            <div className="space-y-6">
-              {/* Notifications */}
-              <div className="flex items-center justify-between group">
-                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-lg bg-blue-100 group-hover:bg-blue-200 transition-colors flex items-center justify-center">
-                    <Bell className="w-5 h-5 text-blue-600" />
-                  </div>
-                  <div>
-                    <h3 className="text-sm font-medium text-gray-900">Notifications</h3>
-                    <p className="text-sm text-gray-500">Get reminders for your habits</p>
-                  </div>
-                </div>
-                <label className="relative inline-flex items-center cursor-pointer">
-                  <input
-                    type="checkbox"
-                    checked={settings.notifications}
-                    onChange={(e) => handleSettingChange('notifications', e.target.checked)}
-                    className="sr-only peer"
-                  />
-                  <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-100 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
-                </label>
-              </div>
-
-              {/* Daily Summary */}
-              <div className="flex items-center justify-between group">
-                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-lg bg-purple-100 group-hover:bg-purple-200 transition-colors flex items-center justify-center">
-                    <Calendar className="w-5 h-5 text-purple-600" />
-                  </div>
-                  <div>
-                    <h3 className="text-sm font-medium text-gray-900">Daily Summary</h3>
-                    <p className="text-sm text-gray-500">Get a daily review of your progress</p>
-                  </div>
-                </div>
-                <label className="relative inline-flex items-center cursor-pointer">
-                  <input
-                    type="checkbox"
-                    checked={settings.dailySummary}
-                    onChange={(e) => handleSettingChange('dailySummary', e.target.checked)}
-                    className="sr-only peer"
-                  />
-                  <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-purple-100 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-purple-600"></div>
-                </label>
-              </div>
-
-              {/* Sound Effects */}
-              <div className="flex items-center justify-between group">
-                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-lg bg-green-100 group-hover:bg-green-200 transition-colors flex items-center justify-center">
-                    <Volume2 className="w-5 h-5 text-green-600" />
-                  </div>
-                  <div>
-                    <h3 className="text-sm font-medium text-gray-900">Sound Effects</h3>
-                    <p className="text-sm text-gray-500">Play sounds for notifications</p>
-                  </div>
-                </div>
-                <label className="relative inline-flex items-center cursor-pointer">
-                  <input
-                    type="checkbox"
-                    checked={settings.soundEnabled}
-                    onChange={(e) => handleSettingChange('soundEnabled', e.target.checked)}
-                    className="sr-only peer"
-                  />
-                  <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-green-100 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-green-600"></div>
-                </label>
-              </div>
-              {/* Reminder Time */}
-              <div className="flex items-center justify-between group">
-                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-lg bg-orange-100 group-hover:bg-orange-200 transition-colors flex items-center justify-center">
-                    <Clock className="w-5 h-5 text-orange-600" />
-                  </div>
-                  <div>
-                    <h3 className="text-sm font-medium text-gray-900">Daily Summary Time</h3>
-                    <p className="text-sm text-gray-500">When to receive your daily overview</p>
-                  </div>
-                </div>
-                <input
-                  type="time"
-                  value={settings.reminderTime}
-                  onChange={(e) => handleSettingChange('reminderTime', e.target.value)}
-                  className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 hover:border-orange-400 transition-colors text-gray-900 bg-white"
-                />
               </div>
             </div>
           </div>
