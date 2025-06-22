@@ -46,7 +46,7 @@ export function Login() {
       }));
 
       toast.success(isLogin ? 'Welcome back!' : 'Registration successful!');
-      navigate('/habits');
+      navigate('/');
     } catch (error) {
       toast.error(error.message || (isLogin ? 'Login failed' : 'Registration failed'));
       console.error('Auth error:', error);
